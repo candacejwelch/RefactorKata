@@ -12,9 +12,7 @@ namespace RefactorKata
 
             var cmd = conn.CreateCommand();
             cmd.CommandText = "select * from Products";
-            /*
-             * cmd.CommandText = "Select * from Invoices";
-             */
+           
             var reader = cmd.ExecuteReader();
             var products = new List<Product>();
 
@@ -24,12 +22,15 @@ namespace RefactorKata
                 var prod = new Product {Name = reader["Name"].ToString()};
                 products.Add(prod);
             }
-            conn.Dispose();
             Console.WriteLine("Products Loaded!");
-            foreach (var t in products)
+            conn.Dispose();
+            
+            foreach (var productName in products)
             {
-                Console.WriteLine(t.Name);
+                Console.WriteLine(productName.Name);
             }
+
+            //extract get product method
         }
     }
 }
