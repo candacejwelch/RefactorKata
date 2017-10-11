@@ -16,7 +16,11 @@ namespace RefactorKata
                 Console.WriteLine("This product is called: " + product.Name);
             }
         }
-
+        /// <summary>
+        /// This method connects to the server and grabs all the products and 
+        /// puts them into a new list.  
+        /// </summary>
+        /// <returns>List of Products.</returns>
         private static IEnumerable<Product> GetProducts()
         {
             using (var conn =
