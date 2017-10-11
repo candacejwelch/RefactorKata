@@ -6,31 +6,38 @@ namespace RefactorKata
 {
     internal class Program
     {
-        private static void Main()
+
+        private static void Main(string[] args)
         {
-            var conn = new SqlConnection("Server=.;Database=myDataBase;User Id=myUsername;Password = myPassword;");
+            var products = GetProducts();
 
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = "select * from Products";
-           
-            var reader = cmd.ExecuteReader();
-            var products = new List<Product>();
-
-            //TODO: Replace with Dapper
-            while (reader.Read())
+            foreach (var product in products)
             {
-                var prod = new Product {Name = reader["Name"].ToString()};
-                products.Add(prod);
+                Console.WriteLine("This product is called: " + product.Name);
             }
-            Console.WriteLine("Products Loaded!");
-            conn.Dispose();
-            
-            foreach (var productName in products)
-            {
-                Console.WriteLine(productName.Name);
-            }
+        }
 
-            //extract get product method
+        private static IEnumerable<Product> GetProducts()
+        {
+            using (var conn =
+                new SqlConnection("Server=.;Database=myDataBase;User Id=myUsername;Password = myPassword;"))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "select * from Products";
+              
+                var reader = cmd.ExecuteReader();
+                var products = new List<Product>();
+
+                //TODO: Replace with Dapper
+                while (reader.Read())
+                {
+                    var prod = new Product { Name = reader["Name"].ToString() };
+                    products.Add(prod);
+                }
+
+                Console.WriteLine("Products Loaded!");
+                return products;
+            }
         }
     }
 }
